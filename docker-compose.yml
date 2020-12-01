@@ -9,8 +9,23 @@ services:
     networks:
       - db-network
   
+  backend:
+    container_name: cinema-backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/usr/src/app
+    networks:
+      - db_network
+    links:
+      - mongodb
+
 volumes:
   db:
 
 networks:
   db-network:
+    driver: bridge

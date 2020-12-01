@@ -2,10 +2,12 @@ version: '3'
 services:
   mongodb:
     image: mongo
+    container_name: db
+    restart: unless-stopped
     ports:
       - "27016:27017"
     volumes:
-      - "db:/data/db"
+      - ./db:/data/db
     networks:
       - db-network
   
@@ -14,12 +16,15 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        - DATABASE=mongodb://mongodb:27017/cinema
+        - PORT=3000
     ports:
-      - "3000:3000"
+      - "3000:8000"
     volumes:
       - ./backend:/usr/src/app
     networks:
-      - db_network
+      - db-network
     links:
       - mongodb
 

@@ -1,8 +1,7 @@
 import app from './app'
-import * as dotenv from 'dotenv'
-dotenv.config()
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log('Started on port ' + PORT)
-  console.log('WAOOA')
+import * as conf from './config'
+const env_var: Config.ProcessEnv = conf.getEnv()
+app.listen(env_var.PORT, () => {
+  console.log('Started on http://localhost:' + env_var.PORT)
+  console.log('Here is your DB URL: ' + env_var.DATABASE)
 })

@@ -1,4 +1,5 @@
 *
+!@types/
 !src/
 !tsconfig.json
 !package.json

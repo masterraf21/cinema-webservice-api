@@ -1,8 +1,10 @@
-export interface Env {
-  port: number | undefined
-  database: string | undefined
+declare global {
+  namespace Config {
+    interface ProcessEnv {
+      PORT: string | undefined
+      DATABASE: string | undefined
+    }
+  }
 }
 
-export interface ProcessEnv {
-  [key: string]: string | undefined
-}
+export {}

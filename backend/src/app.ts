@@ -6,7 +6,7 @@ app.use(cors())
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({
-    message: 'Hello tsc'
+    message: 'Hello miss you s'
   })
 })
 

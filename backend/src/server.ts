@@ -1,5 +1,8 @@
 import app from './app'
-
-app.listen(8000, () => {
-  console.log('Started on port 8000')
+import * as dotenv from 'dotenv'
+dotenv.config()
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log('Started on port ' + PORT)
+  console.log('WAOOA')
 })

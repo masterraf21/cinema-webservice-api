@@ -12,17 +12,17 @@ services:
       - db-network
   
   backend:
-    container_name: cinema-backend
+    container_name: backend
     build: 
       context: ./backend
       dockerfile: Dockerfile
       args:
         - DATABASE=mongodb://mongodb:27017/cinema
-        - PORT=3000
+        - PORT=8000
     ports:
       - "3000:8000"
-    volumes:
-      - ./backend:/usr/src/app
+    # volumes:
+    #   - ./backend:/usr/src/app
     networks:
       - db-network
     links:

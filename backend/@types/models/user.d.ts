@@ -2,11 +2,10 @@ import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface UserType {
-      username?: string
-      password?: string
-      fullName?: string
-      email?: string
-      salt?: string
+      username: string
+      password: string
+      full_name: string
+      email: string
     }
 
     interface IUser extends Document {

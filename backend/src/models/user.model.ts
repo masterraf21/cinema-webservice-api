@@ -11,8 +11,7 @@ const userSchema: Schema = new Schema(
       trim: true
     },
     encrypted_password: {
-      type: String,
-      required: true
+      type: String
     },
     email: {
       type: String,
@@ -49,15 +48,12 @@ userSchema.method({
     if (!plain_password) {
       return ''
     }
-
     return crypto.createHmac('sha256', this.salt).update(plain_password).digest('hex')
   }
 })
 
-class UserModel extends mongoose.model('User', userSchema, 'users') {
+export class UserModel extends mongoose.model('User', userSchema, 'users') {
   constructor(userData: Model.UserType) {
     super(userData)
   }
 }
-
-export default UserModel

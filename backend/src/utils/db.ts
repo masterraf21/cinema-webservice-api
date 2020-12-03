@@ -1,4 +1,5 @@
 import { ConnectOptions, connect, createConnection } from 'mongoose'
+
 import { getEnv } from '../config'
 
 const envVar: Config.ProcessEnv = getEnv()
@@ -9,7 +10,9 @@ export const connectDB = async () => {
     const options: ConnectOptions = {
       useNewUrlParser: true,
       useFindAndModify: false,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      autoCreate: true,
+      useCreateIndex: true
     }
     const connection = await createConnection(envVar.DATABASE!, options)
     await connect(envVar.DATABASE!, options)

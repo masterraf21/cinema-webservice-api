@@ -1,18 +1,20 @@
 import { ConnectOptions, connect, createConnection } from 'mongoose'
 import { getEnv } from '../config'
-const env_var: Config.ProcessEnv = getEnv()
 
+const envVar: Config.ProcessEnv = getEnv()
+
+/** Create connection to MongoDB with mongoose */
 export const connectDB = async () => {
   try {
     const options: ConnectOptions = {
       useNewUrlParser: true,
       useFindAndModify: false,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     }
-    var connection = await createConnection(env_var.DATABASE!, options)
-    await connect(env_var.DATABASE!, options)
+    const connection = await createConnection(envVar.DATABASE!, options)
+    await connect(envVar.DATABASE!, options)
     console.log('MongoDB Connected')
-    console.log('Connection state: ' + connection.readyState)
+    console.log(`Connection state: ${connection.readyState}`)
   } catch (err) {
     console.error(err.message)
     process.exit(1)

@@ -11,7 +11,7 @@ app.use(cors())
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({
-    message: 'Hello miss you salsa',
+    message: 'The friend im dreaming of is far away, and doesnt feel my love'
   })
 })
 

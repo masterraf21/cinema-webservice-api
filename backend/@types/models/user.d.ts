@@ -14,8 +14,8 @@ declare global {
       encrypted_password?: string
       email?: string
       full_name?: string
-      salt: string
-      authenticate?: (plain_password: string) => string
+      salt?: string
+      authenticate?: (plain_password: string) => boolean
       hashPassword?: (plain_password: string) => string
     }
   }

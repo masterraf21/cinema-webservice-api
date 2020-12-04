@@ -15,6 +15,10 @@ const movieSchema: Schema = new Schema(
       required: true,
       min: 0.0,
       max: 5.0
+    },
+    summary: {
+      type: String,
+      required: true
     }
   },
   { timestamps: true }

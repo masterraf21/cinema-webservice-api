@@ -35,7 +35,8 @@ async function testMovieHelper(): Promise<void> {
     const movieData: Model.MovieType = {
       title: `To All The Boys I've loved Before`,
       director: 'Jeff Kinney',
-      rating: 5.0
+      rating: 5.0,
+      summary: 'A guys meets girl then falls in love'
     }
     const result = await movieHelper.createMovie(movieData)
     if (result) {

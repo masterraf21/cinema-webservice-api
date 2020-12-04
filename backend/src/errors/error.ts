@@ -1,9 +1,8 @@
 import { Response } from 'express'
 
-export function badRequest(err: any, res: Response) {
+export function badRequest(msg: string, res: Response) {
   res.status(400).json({
-    message: 'Bad Request',
-    error: err
+    message: `Bad Request: ${msg}`
   })
 }
 

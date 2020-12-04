@@ -4,12 +4,18 @@ function validateUserData(userData: Model.UserType): boolean {
   return true
 }
 const createUser = async (userData: Model.UserType) => {
-  if (validateUserData(userData)) {
+  try {
+    const existingUser = await UserModel.findOne({
+      username: userData.username
+    })
+    if (existingUser != null) {
+      throw new Error('User ' + userData.username + ' already exist')
+    }
     const user: Model.IUser = new UserModel(userData)
     const result = await user.save()
     return result
-  } else {
-    throw new Error('User Input Data not valid')
+  } catch (err) {
+    console.log(err.message)
   }
 }
 

@@ -1,9 +1,9 @@
 declare global {
   namespace Model {
-    interface Booking {
-      user?: Model.UserType
-      showtime?: Model.ShowtimeType
-      movies?: Array<Model.MovieType>
+    interface BookingType {
+      user: Model.UserType
+      showtime: Model.ShowtimeType
+      movies: Array<Model.MovieType>
     }
 
     interface IBooking extends Document {

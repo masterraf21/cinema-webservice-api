@@ -14,4 +14,9 @@ const showtimeSchema: Schema = new Schema({
   ]
 })
 
-export default mongoose.model<Model.IShowtime>('Showtime', showtimeSchema, 'showtimes')
+// export default mongoose.model<Model.IShowtime>('Showtime', showtimeSchema, 'showtimes')
+export class ShowtimeModel extends mongoose.model('Showtime', showtimeSchema, 'showtimes') {
+  constructor(showtimeData: Model.ShowtimeType) {
+    super(showtimeData)
+  }
+}

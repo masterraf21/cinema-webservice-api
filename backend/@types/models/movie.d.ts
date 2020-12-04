@@ -8,9 +8,9 @@ declare global {
     }
 
     interface IMovie extends Document {
-      title: string
-      director: string
-      rating: number
+      title?: string
+      director?: string
+      rating?: number
     }
   }
 }

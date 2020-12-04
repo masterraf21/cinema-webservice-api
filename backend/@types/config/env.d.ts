@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       PORT: string | undefined
       DATABASE: string | undefined
+      SECRET: string | undefined
     }
   }
 }

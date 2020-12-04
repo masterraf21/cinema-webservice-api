@@ -1,6 +1,4 @@
-// import { ConnectOptions, connect, createConnection } from 'mongoose'
 import mongoose from 'mongoose'
-// import { createConnection } from 'net'
 mongoose.set('useNewUrlParser', true)
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
@@ -10,24 +8,25 @@ import { getEnv } from '../config'
 const envVar: Config.ProcessEnv = getEnv()
 
 /** Create connection to MongoDB with mongoose */
-export const connectDB = async () => {
+export async function connectDB() {
   try {
     const connection = await mongoose.createConnection(envVar.DATABASE!, {
       useUnifiedTopology: true,
       useNewUrlParser: true
     })
+    console.log('Connecting....')
     await mongoose.connect(envVar.DATABASE!, {
       useUnifiedTopology: true,
       useNewUrlParser: true
     })
-    console.log('MongoDB Connected')
-    console.log(`Connection state: ${connection.readyState}`)
+    console.log(`MongoDB Connected with connection state: ${connection.readyState}`)
   } catch (err) {
     console.error(err.message)
-    process.exit(1)
   }
 }
 
-export function closeDB(): void {
-  mongoose.connection.close()
+export async function closeDB() {
+  console.log('Closing......')
+  await mongoose.connection.close()
+  console.log('MongoDB Closed')
 }

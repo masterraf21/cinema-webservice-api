@@ -18,6 +18,17 @@ const userSchema: Schema = new Schema(
       required: true,
       trim: true
     },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female'],
+      required: true
+    },
+    role: {
+      type: String,
+      enum: ['User', 'Admin'],
+      default: 'User',
+      required: true
+    },
     full_name: {
       type: String,
       required: true,

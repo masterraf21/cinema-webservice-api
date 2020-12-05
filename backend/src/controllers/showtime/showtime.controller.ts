@@ -5,7 +5,7 @@ import { MovieModel, ShowtimeModel } from '../../models'
 
 async function getAllShowtimes(req: Request, res: Response) {
   try {
-    const showtimes: Model.IShowtime[] = await ShowtimeModel.find().exec()
+    const showtimes: Model.IShowtime[] = await ShowtimeModel.find().populate('movies').exec()
     if (!showtimes.length) {
       return notFoundError('Showtimes', res)
     }
@@ -25,7 +25,9 @@ async function getShowById(req: Request, res: Response) {
       return badRequest('ObjectId not valid', res)
     }
     const id = mongoose.Types.ObjectId(req.params.id)
-    const showtime: Model.IShowtime | null = await ShowtimeModel.findById(id).exec()
+    const showtime: Model.IShowtime | null = await ShowtimeModel.findById(id)
+      .populate('movies')
+      .exec()
     if (!showtime) {
       return notFoundError('Showtime', res)
     }

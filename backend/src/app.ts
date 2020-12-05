@@ -4,6 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import movieRoutes from './routes/movie.routes'
+import showtimeRoutes from './routes/showtime.routes'
 // create exporess APP
 const app = express()
 
@@ -17,6 +18,7 @@ app.use(cookieParser())
 
 //? Routes
 app.use('/api', movieRoutes)
+app.use('/api', showtimeRoutes)
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({
     message: 'The friend im dreaming of is far away, and doesnt feel my love'

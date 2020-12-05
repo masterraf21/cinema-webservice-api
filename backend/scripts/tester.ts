@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import from
 
-import * as uHelper from '../controllers/user/user.helper'
-import * as movieHelper from '../controllers/movie/movie.helper'
-import * as showtimeHelper from '../controllers/showtime/showtime.helper'
-import { connectDB, closeDB } from '../utils'
+import * as uHelper from '../src/controllers/user/user.helper'
+import * as movieHelper from '../src/controllers/movie/movie.helper'
+import * as showtimeHelper from '../src/controllers/showtime/showtime.helper'
+import * as showController from '../src/controllers/showtime/showtime.controller'
+import { connectDB, closeDB } from '../src/utils'
+import { Model } from 'mongoose'
+import { ShowtimeModel } from '../src/models'
 
 async function testUserHelper(): Promise<void> {
   try {
@@ -77,7 +80,56 @@ async function testShowtime() {
     process.exit(0)
   }
 }
+
+function testValidate() {
+  try {
+    // connectDB()
+    const arr: any[] = ['5fca334278ab5a1100e6890e', 'aaa']
+    const res = showController.validateObj(arr)
+    console.log(res)
+    process.exit(0)
+  } catch (error) {
+    process.exit(0)
+  }
+}
+
+async function testValidateMovie() {
+  try {
+    await connectDB()
+    //  '5fca33a37008cb5828aee15d'
+    const arr: any[] = ['5fca334278ab5a1100e6890e', '5fca33a37008cb5828aee15d']
+    const res = await showController.validateMovie(arr)
+    console.log(res)
+    await closeDB()
+    process.exit(0)
+  } catch (err) {
+    console.error(`${err}`)
+    await closeDB()
+    process.exit(0)
+  }
+}
+
+async function createShowtime() {
+  try {
+    await connectDB()
+    const showtime = {
+      date: new Date(Date.now()),
+      movies: ['5fca334278ab5a1100e6890e', '5fca35645eb3b551c4f0b1de']
+    }
+    const show = new ShowtimeModel(showtime)
+    await show.save()
+    console.log(show)
+    await closeDB()
+    process.exit(0)
+  } catch (err) {
+    console.error(`${err}`)
+    await closeDB()
+    process.exit(0)
+  }
+}
 // testUserHelper()
 // testMovieHelper()
-getMovieName()
+// getMovieName()
 // testShowtime()
+// testValidateMovie()
+createShowtime()

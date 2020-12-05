@@ -15,7 +15,7 @@
     "prestart": "npm run build",
     "lint": "standard",
     "prestart:dev": "npm run build",
-    "tester": "ts-node src/scripts/tester.ts"
+    "tester": "ts-node scripts/tester.ts"
   },
   "author": "masterraf21",
   "license": "ISC",

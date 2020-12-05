@@ -1,14 +1,16 @@
+import { ObjectID } from 'mongodb'
 import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface ShowtimeType {
       date: Date
-      movies: Array<Model.IMovie | null>
+      movies?: string[]
     }
 
     interface IShowtime extends Document {
+      _id?: ObjectID
       date?: Date
-      movies?: Array<Model.IMovie>
+      movies?: Model.IMovie[] | null
     }
   }
 }

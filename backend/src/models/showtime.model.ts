@@ -9,7 +9,9 @@ const showtimeSchema: Schema = new Schema({
   movies: [
     {
       type: ObjectId,
-      ref: 'Movie'
+      ref: 'Movie',
+      required: false,
+      default: null
     }
   ]
 })

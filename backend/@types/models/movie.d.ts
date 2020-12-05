@@ -3,10 +3,10 @@ import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface MovieType {
-      title: string
-      director: string
-      rating: number
-      summary: string
+      title?: string | ParsedQS
+      director?: string | ParsedQS
+      rating?: number
+      summary?: string
     }
 
     interface IMovie extends Document {

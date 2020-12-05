@@ -1,15 +1,18 @@
+import { ObjectID } from 'mongodb'
+import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface BookingType {
-      user: Model.UserType
-      showtime: Model.ShowtimeType
-      movies: Array<Model.MovieType>
+      user?: ObjectId | string | ParsedQS
+      showtime?: ObjectId | string | ParsedQS
+      movie?: ObjectId | string | ParsedQS
     }
 
     interface IBooking extends Document {
+      _id?: ObjectID
       user?: Model.IUser
       showtime?: Model.IShowtime
-      movies?: Array<Model.IMovie>
+      movie?: Model.IMovie
     }
   }
 }

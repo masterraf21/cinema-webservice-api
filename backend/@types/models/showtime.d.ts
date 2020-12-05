@@ -4,7 +4,7 @@ declare global {
   namespace Model {
     interface ShowtimeType {
       date: Date
-      movies?: string[]
+      movies?: ObjectId[] | string[]
     }
 
     interface IShowtime extends Document {

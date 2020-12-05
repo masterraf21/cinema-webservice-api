@@ -17,8 +17,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       args:
-        - DATABASE=mongodb://mongodb:27017/cinema
+        - DATABASE=mongodb://localhost:27017/cinema
         - PORT=8000
+        - SECRET=askljhaskjf
     ports:
       - "3000:8000"
     # volumes:

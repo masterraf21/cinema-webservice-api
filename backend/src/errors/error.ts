@@ -6,9 +6,9 @@ export function badRequest(msg: string, res: Response) {
   })
 }
 
-export function notFoundError(notFound: string, res: Response) {
+export function notFoundError(resource: string, res: Response) {
   res.status(404).json({
-    message: `${notFound} not found`
+    message: `${resource} not found`
   })
 }
 

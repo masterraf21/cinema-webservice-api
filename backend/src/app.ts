@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import movieRoutes from './routes/movie.routes'
 import showtimeRoutes from './routes/showtime.routes'
 import bookingRoutes from './routes/booking.routes'
+import userRoutes from './routes/user.routes'
 // create exporess APP
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cookieParser())
 app.use('/api', movieRoutes)
 app.use('/api', showtimeRoutes)
 app.use('/api', bookingRoutes)
+app.use('/api', userRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({

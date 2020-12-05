@@ -1,16 +1,18 @@
+import { ObjectId } from 'mongodb'
 import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface UserType {
-      username: string
-      password: string
-      full_name: string
-      email: string
-      gender: string
-      role?: string
+      username: string | ParsedQS
+      password: string | ParsedQS
+      full_name: string | ParsedQS
+      email: string | ParsedQS
+      gender: string | ParsedQS
+      role?: string | ParsedQS
     }
 
     interface IUser extends Document {
+      _id?: ObjectId
       username?: string
       password?: string
       encrypted_password?: string

@@ -6,4 +6,5 @@ bookingRoutes.get('/bookings', [], controller.getAllBookings)
 bookingRoutes.post('/bookings', [], controller.createBooking)
 bookingRoutes.get('/bookings/:id', [], controller.getBookingbyId)
 bookingRoutes.get('/bookings/query/p', [], controller.searchBokingQuery)
+
 export default bookingRoutes

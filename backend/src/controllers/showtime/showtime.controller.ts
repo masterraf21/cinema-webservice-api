@@ -62,7 +62,7 @@ async function deleteShowById(req: Request, res: Response) {
   }
 }
 
-function validateObj(arr: any[]): boolean {
+function validateObjArr(arr: any[]): boolean {
   let validated = true
   arr.forEach((_elm) => {
     if (!mongoose.Types.ObjectId.isValid(_elm)) {
@@ -70,6 +70,10 @@ function validateObj(arr: any[]): boolean {
     }
   })
   return validated
+}
+
+function validateObj(obj: string): boolean {
+  return mongoose.Types.ObjectId.isValid(obj)
 }
 
 async function returnMovies(arr: string[]): Promise<(Model.IMovie | null)[]> {
@@ -81,24 +85,58 @@ async function returnMovies(arr: string[]): Promise<(Model.IMovie | null)[]> {
   return result
 }
 
-async function validateMovie(arr: string[]): Promise<boolean> {
+async function validateMovieArr(arr: string[]): Promise<boolean> {
   const movies = await returnMovies(arr)
   const other = !movies.includes(null)
   return other
+}
+
+async function validateMovie(movie: string): Promise<boolean> {
+  const imovie: Model.IMovie | null = await MovieModel.findById(movie).exec()
+  return imovie != null
 }
 
 function validateDate(date: Date): boolean {
   return date instanceof Date
 }
 
+async function addMovietoShowtime(req: Request, res: Response) {
+  if (req.body.movie && req.body.showtime) {
+    try {
+      const movie = req.body.movie
+      if (!validateObj(movie)) {
+        return badRequest('Movie ObjectId not valid', res)
+      }
+      if (!validateMovie(movie)) {
+        return notFoundError('Movie', res)
+      }
+      const showtime: Model.IShowtime | null = await ShowtimeModel.findById(
+        req.body.showtime
+      ).exec()
+      if (!showtime) {
+        return notFoundError('Showtime', res)
+      }
+      await ShowtimeModel.findByIdAndUpdate(showtime._id, {
+        $push: { movies: movie }
+      })
+      res.status(200).json({
+        message: `Showtime with id ${showtime._id} is added with movie id: ${movie}`
+      })
+    } catch (error) {
+      internalServerError(error, res)
+    }
+  } else {
+    badRequest('Required body not found', res)
+  }
+}
 async function createShowtime(req: Request, res: Response) {
-  try {
-    if (req.body.date) {
+  if (req.body.date) {
+    try {
       if (!validateDate(req.body.date)) {
         return badRequest('Date not valid', res)
       }
       if (req.body.movies) {
-        if (!(await validateMovie(req.body.movies))) {
+        if (!(await validateMovieArr(req.body.movies))) {
           return badRequest('Movie ObjectId Not valid', res)
         }
         if (!returnMovies(req.body.movies)) {
@@ -107,23 +145,25 @@ async function createShowtime(req: Request, res: Response) {
       }
       const showtime: Model.IShowtime = new ShowtimeModel(req.body)
       await showtime.save()
-      res.status(200).json({
+      res.status(201).json({
         message: 'Showtime Created',
         _id: showtime._id
       })
-    } else {
-      badRequest('Required body not found', res)
+    } catch (error) {
+      internalServerError(error, res)
     }
-  } catch (error) {
-    internalServerError(error, res)
+  } else {
+    badRequest('Required body not found', res)
   }
 }
 export {
-  validateMovie,
-  validateObj,
+  validateMovieArr,
+  validateObjArr,
   getAllShowtimes,
   getShowById,
   deleteShowById,
   createShowtime,
-  returnMovies
+  returnMovies,
+  addMovietoShowtime,
+  validateObj
 }

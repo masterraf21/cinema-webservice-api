@@ -83,46 +83,31 @@ async function deleteMoviebyId(req: Request, res: Response) {
 async function searchMovieQuery(req: Request, res: Response) {
   try {
     if (req.query.title || req.query.director) {
+      let query: Model.MovieType
       if (req.query.title && req.query.director) {
-        const movies: Model.IMovie[] = await MovieModel.find({
+        query = {
           title: req.query.title,
           director: req.query.director
-        })
-        if (!movies.length) {
-          return notFoundError('Movies', res)
         }
-        res.status(200).json({
-          message: 'Movies found',
-          length: movies.length,
-          movies
-        })
       } else if (req.query.title) {
-        const movies: Model.IMovie[] = await MovieModel.find({
+        query = {
           title: req.query.title
-        })
-        if (!movies.length) {
-          return notFoundError('Movies', res)
         }
-
-        res.status(200).json({
-          message: 'Movies found',
-          length: movies.length,
-          movies
-        })
       } else if (req.query.director) {
-        const movies: Model.IMovie[] = await MovieModel.find({
+        query = {
           director: req.query.director
-        })
-        if (!movies.length) {
-          return notFoundError('Movies', res)
         }
-
-        res.status(200).json({
-          message: 'Movies found',
-          length: movies.length,
-          movies
-        })
       }
+
+      const movies: Model.IMovie[] = await MovieModel.find(query!)
+      if (!movies.length) {
+        return notFoundError('Movies', res)
+      }
+      res.status(200).json({
+        message: 'Movies found',
+        length: movies.length,
+        movies
+      })
     } else {
       badRequest('At least need one query param', res)
     }

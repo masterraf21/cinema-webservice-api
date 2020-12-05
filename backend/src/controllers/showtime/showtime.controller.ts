@@ -83,7 +83,6 @@ async function returnMovies(arr: string[]): Promise<(Model.IMovie | null)[]> {
 
 async function validateMovie(arr: string[]): Promise<boolean> {
   const movies = await returnMovies(arr)
-  console.log(movies)
   const other = !movies.includes(null)
   return other
 }

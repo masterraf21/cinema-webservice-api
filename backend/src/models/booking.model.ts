@@ -4,18 +4,19 @@ import mongoose, { Schema } from 'mongoose'
 const bookingSchema: Schema = new Schema({
   user: {
     type: ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   showtimes: {
     type: ObjectId,
-    ref: 'Showtime'
+    ref: 'Showtime',
+    required: true
   },
-  movies: [
-    {
-      type: ObjectId,
-      ref: 'Movie'
-    }
-  ]
+  movie: {
+    type: ObjectId,
+    ref: 'Movie',
+    required: true
+  }
 })
 
 export class BookingModel extends mongoose.model('Booking', bookingSchema, 'bookings') {

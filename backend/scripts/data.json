@@ -1,0 +1,43 @@
+{
+  "user": {
+    "_model": "User",
+    "admin": {
+      "username": "admin",
+      "password": "kinbote01",
+      "full_name": "Charles Kinbote",
+      "email": "kinbote@gmail.com",
+      "gender": "Male",
+      "role": "Admin"
+    },
+    "another_admin": {
+      "username": "shade",
+      "password": "shade01",
+      "full_name": "John Shade",
+      "email": "shade@gmail.com",
+      "gender": "Male",
+      "role": "Admin"
+    },
+    "user1": {
+      "username": "naorihana",
+      "password": "bulanbulan",
+      "full_name": "Naori Hana",
+      "email": "naorihana@gmail.com",
+      "gender": "Female"
+    }
+  },
+  "movie": {
+    "_model": "Movie",
+    "movie1": {
+      "title": "Eternal Sunshine of The Spotless Mind",
+      "director": "Michel Gondry",
+      "rating": 5.0,
+      "summary": "Girl erases her memory, boy erases his memory, they meet and fall in love again"
+    },
+    "movie2": {
+      "title": "The Godfather",
+      "director": "Francis Ford Coppola",
+      "rating": 5.0,
+      "summary": "A great king with 3 sons trying to give his empire to one of them"
+    }
+  }
+}

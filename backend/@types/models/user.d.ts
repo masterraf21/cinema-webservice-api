@@ -3,11 +3,10 @@ import { Document } from 'mongoose'
 declare global {
   namespace Model {
     interface UserType {
-      username: string | ParsedQS
-      password: string | ParsedQS
-      full_name: string | ParsedQS
+      username?: string | ParsedQS
+      password?: string | ParsedQS
+      full_name?: string | ParsedQS
       email: string | ParsedQS
-      gender: string | ParsedQS
       role?: string | ParsedQS
     }
 
@@ -19,7 +18,6 @@ declare global {
       email?: string
       full_name?: string
       salt?: string
-      gender?: string
       role?: string
       authenticate?: (plain_password: string) => boolean
       hashPassword?: (plain_password: string) => string

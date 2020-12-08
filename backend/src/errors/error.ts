@@ -18,10 +18,9 @@ export function invalidCredentials(res: Response) {
   })
 }
 
-export function unAuthorizedError(res: Response) {
+export function unAuthorizedError(msg: string, res: Response) {
   res.status(403).json({
-    message: 'UnAuthorized Error',
-    error: 'Access Denied'
+    message: `Unauthorized: ${msg}`
   })
 }
 

@@ -1,13 +1,14 @@
 import mongoose, { Schema } from 'mongoose'
 import crypto from 'crypto'
 import { v4 as uuidv4 } from 'uuid'
+import * as passport from 'passport-local-mongoose'
+// import { use } from 'nconf'
 
 const userSchema: Schema = new Schema(
   {
     username: {
       type: String,
       unique: true,
-      required: true,
       trim: true
     },
     encrypted_password: {
@@ -18,11 +19,6 @@ const userSchema: Schema = new Schema(
       required: true,
       trim: true
     },
-    gender: {
-      type: String,
-      enum: ['Male', 'Female'],
-      required: true
-    },
     role: {
       type: String,
       enum: ['User', 'Admin'],
@@ -31,7 +27,6 @@ const userSchema: Schema = new Schema(
     },
     full_name: {
       type: String,
-      required: true,
       trim: true
     },
     salt: String
@@ -51,11 +46,11 @@ userSchema
   })
 
 userSchema.method({
-  authenticate: function (plain_password: string) {
+  authenticate: function (plain_password: string): boolean {
     return this.hashPassword(plain_password) === this.encrypted_password
   },
 
-  hashPassword: function (plain_password: string) {
+  hashPassword: function (plain_password: string): string {
     if (!plain_password) {
       return ''
     }

@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Cinema Backend API",
+    "version": "1.0.0",
+    "description": "Back End API for Cinema System",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "x-logo": {
+      "url": ""
+    }
+  }
+}

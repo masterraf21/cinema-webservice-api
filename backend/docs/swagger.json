@@ -11,5 +11,321 @@
     "x-logo": {
       "url": ""
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "all-role",
+      "description": "Can be accessed by all role"
+    },
+    {
+      "name": "admin-role",
+      "description": "Can only be accessed by admin role"
+    },
+    {
+      "name": "user-role",
+      "description": "Can be accessed by user"
+    },
+    {
+      "name": "movie-resource",
+      "description": "Movie related api"
+    },
+    {
+      "name": "booking-resource",
+      "description": "Booking related api"
+    },
+    {
+      "name": "showtime-resource",
+      "description": "Showtime related api"
+    },
+    {
+      "name": "user-resource",
+      "description": "User related api"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local server"
+    }
+  ],
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Movie": {
+        "description": "Movie data",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "ObjectId",
+            "description": "ObjectId assigned default by MongoDB",
+            "example": "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the movie",
+            "example": "Eternal Sunshine of The Spotless Mind"
+          },
+          "director": {
+            "type": "string",
+            "description": "Director of the movie",
+            "example": "Michel Gondry"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the movie",
+            "example": "A couple tries to forget each other, what waited beyond them shake their core"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Rating of the movie",
+            "minimum": 0.0,
+            "maximum": 5.0
+          }
+        }
+      },
+      "Movie-to-create": {
+        "description": "Movie data to be created",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the movie",
+            "example": "Eternal Sunshine of The Spotless Mind"
+          },
+          "director": {
+            "type": "string",
+            "description": "Director of the movie",
+            "example": "Michel Gondry"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the movie",
+            "example": "A couple tries to forget each other, what waited beyond them shake their core"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Rating of the movie",
+            "minimum": 0.0,
+            "maximum": 5.0
+          }
+        }
+      },
+      "Showtime": {
+        "description": "Showtime data",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "ObjectId",
+            "description": "ObjectId assigned default by MongoDB",
+            "example": "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time of the showtime",
+            "example": "2020-11-18T09:00:51.294+00:00"
+          },
+          "movies": {
+            "type": "array",
+            "description": "Movies in the showtime",
+            "items": {
+              "$ref": "#/components/schemas/Movie"
+            }
+          }
+        }
+      },
+      "Showtime-to-create": {
+        "description": "Showtime data",
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time of the showtime",
+            "example": "2020-11-18T09:00:51.294+00:00"
+          },
+          "movies": {
+            "type": "array",
+            "description": "Movies in the showtime",
+            "items": {
+              "$ref": "#/components/schemas/Movie"
+            }
+          }
+        }
+      },
+      "Booking": {
+        "description": "Booking made by User to see a movie at a showtime",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "ObjectId",
+            "description": "ObjectId assigned default by MongoDB",
+            "example": "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "user": {
+            "type": "object",
+            "description": "User made the booking",
+            "$ref": "#/components/schemas/User"
+          },
+          "showtimes": {
+            "type": "object",
+            "description": "Showtime for the booking",
+            "$ref": "#/components/schemas/Showtime"
+          },
+          "movie": {
+            "type": "object",
+            "description": "Movie to be seen at the booking",
+            "$ref": "#/components/schemas/Movie"
+          }
+        }
+      },
+      "Booking-to-create": {
+        "description": "Booking to be created",
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "User made the booking",
+            "$ref": "#/components/schemas/User"
+          },
+          "showtimes": {
+            "type": "object",
+            "description": "Showtime for the booking",
+            "$ref": "#/components/schemas/Showtime"
+          },
+          "movie": {
+            "type": "object",
+            "description": "Movie to be seen at the booking",
+            "$ref": "#/components/schemas/Movie"
+          }
+        }
+      },
+      "User": {
+        "description": "User doing operations",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "ObjectId",
+            "description": "ObjectId assigned default by MongoDB",
+            "example": "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username unique to each user",
+            "example": "kinbote01"
+          },
+          "encrypted_password": {
+            "type": "string",
+            "format": "hash",
+            "description": "Hashed password",
+            "example": "2678d27b7faca76050e7b69727ee0bb22342c07796f1336ad066e2c0c439f426"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the user",
+            "example": "kinbote@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the user",
+            "enum": ["User", "Admin"],
+            "default": "User"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Full name of the user",
+            "example": "Charles Kinbote"
+          },
+          "salt": {
+            "type": "string",
+            "description": "salt to hash the user password",
+            "example": "2765381a-9ad9-4491-86a3-1523a18aeacb"
+          }
+        }
+      },
+      "User-to-create": {
+        "description": "User doing operations",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Username unique to each user",
+            "example": "kinbote01"
+          },
+          "plain_pasword": {
+            "type": "string",
+            "description": "Plain password",
+            "example": "kinbotethebest"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the user",
+            "example": "kinbote@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the user",
+            "enum": ["User", "Admin"],
+            "default": "User"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Full name of the user",
+            "example": "Charles Kinbote"
+          }
+        }
+      },
+      "User-oauth": {
+        "description": "User registered by oauth",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "ObjectId",
+            "description": "ObjectId assigned default by MongoDB",
+            "example": "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the user",
+            "example": "kinbote@gmail.com"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the user",
+            "enum": ["User", "Admin"],
+            "default": "User"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-access-token"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "oauth.google.com",
+            "tokenUrl": "oauth.google.com/token"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    },
+    {
+      "OAuth2": []
+    }
+  ]
 }

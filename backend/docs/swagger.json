@@ -220,7 +220,7 @@
           "description": "Movie data to be created",
           "required": true,
           "content": {
-            "aplication/json": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Movie-to-create"
               }
@@ -329,7 +329,7 @@
           "description": "Movie data to be created",
           "required": true,
           "content": {
-            "aplication/json": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/User-to-create"
               }
@@ -525,7 +525,7 @@
           "description": "Showtime data to be created",
           "required": true,
           "content": {
-            "aplication/json": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Movie-to-create"
               }
@@ -676,7 +676,7 @@
           "description": "Booking data to be created",
           "required": true,
           "content": {
-            "aplication/json": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Booking-to-create"
               }

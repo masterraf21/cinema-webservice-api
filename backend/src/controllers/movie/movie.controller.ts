@@ -97,11 +97,13 @@ async function searchMovieQuery(req: Request, res: Response) {
         query = {
           director: req.query.director
         }
+      } else {
+        query = {}
       }
 
       const movies: Model.IMovie[] = await MovieModel.find(query!)
       if (!movies.length) {
-        return notFoundError('Movies', res)
+        return notFoundError('Movie', res)
       }
       res.status(200).json({
         message: 'Movies found',
@@ -115,4 +117,36 @@ async function searchMovieQuery(req: Request, res: Response) {
     internalServerError(error, res)
   }
 }
-export { createMovie, getAllMovie, getMoviebyId, deleteMoviebyId, searchMovieQuery }
+
+async function editMovie(req: Request, res: Response) {
+  try {
+    if (req.body.id) {
+      let query: Model.MovieType
+      if (req.body.title && req.body.director && req.body.rating && req.body.summary) {
+        query = {
+          title: req.body.title,
+          director: req.body.director,
+          rating: req.body.rating,
+          summary: req.body.summary
+        }
+        const movie: Model.IMovie | null = await MovieModel.findByIdAndUpdate(req.body.id, query)
+        if (!movie) {
+          return notFoundError('Movie', res)
+        }
+        res.status(204).json({
+          message: 'Movie updated',
+          movie: {
+            id: movie._id
+          }
+        })
+      } else {
+        badRequest('Required body not found', res)
+      }
+    } else {
+      badRequest('Need id', res)
+    }
+  } catch (error) {
+    internalServerError(error, res)
+  }
+}
+export { createMovie, getAllMovie, getMoviebyId, deleteMoviebyId, searchMovieQuery, editMovie }

@@ -1,5 +1,4 @@
-import { ObjectID } from 'mongodb'
-import { Document } from 'mongoose'
+import { Document, ObjectId } from 'mongoose'
 declare global {
   namespace Model {
     interface BookingType {
@@ -9,7 +8,7 @@ declare global {
     }
 
     interface IBooking extends Document {
-      _id?: ObjectID
+      _id?: ObjectId
       user?: Model.IUser
       showtime?: Model.IShowtime
       movie?: Model.IMovie

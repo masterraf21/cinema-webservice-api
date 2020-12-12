@@ -1,5 +1,4 @@
-import { ObjectID } from 'mongodb'
-import { Document } from 'mongoose'
+import { Document, ObjectId } from 'mongoose'
 declare global {
   namespace Model {
     interface ShowtimeType {

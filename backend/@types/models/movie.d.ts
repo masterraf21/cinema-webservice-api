@@ -1,5 +1,4 @@
-import { ObjectID } from 'mongodb'
-import { Document } from 'mongoose'
+import { Document, ObjectId } from 'mongoose'
 declare global {
   namespace Model {
     interface MovieType {
@@ -10,7 +9,7 @@ declare global {
     }
 
     interface IMovie extends Document {
-      _id?: ObjectID
+      _id?: ObjectId
       title?: string
       director?: string
       rating?: number

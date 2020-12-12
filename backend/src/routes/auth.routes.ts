@@ -38,7 +38,7 @@ authRoutes.get(
   [passport.authenticate('github')],
   controller.githubCallback
 )
-authRoutes.post('/auth/signup', [checkDuplicateEmail, checkDuplicateEmail], controller.signUp)
+authRoutes.post('/auth/signup', [checkDuplicateEmail, checkDuplicateUsername], controller.signUp)
 authRoutes.post('/auth/signin', [], controller.signIn)
 
 export default Router

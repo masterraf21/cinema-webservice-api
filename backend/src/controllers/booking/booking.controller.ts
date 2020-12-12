@@ -96,6 +96,8 @@ async function searchBokingQuery(req: Request, res: Response) {
         query = {
           showtime: req.query.showtime
         }
+      } else {
+        query = {}
       }
 
       const bookings: Model.IBooking[] = await BookingModel.find(query!).populate(

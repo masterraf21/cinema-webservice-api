@@ -1,4 +1,3 @@
-import { verify } from 'crypto'
 import { Router } from 'express'
 import * as controller from '../controllers/showtime/showtime.controller'
 import { isAdmin, verifyToken } from '../middlewares'
@@ -8,6 +7,6 @@ showtimeRoutes.get('/showtimes', [], controller.getAllShowtimes)
 showtimeRoutes.post('/showtimes', [verifyToken, isAdmin], controller.createShowtime)
 showtimeRoutes.post('/showtimes/movie', [verifyToken], controller.addMovietoShowtime)
 showtimeRoutes.delete('/showtimes/:id', [verifyToken, isAdmin], controller.deleteShowById)
-showtimeRoutes.get('/showtimes', [], controller.getShowById)
+showtimeRoutes.get('/showtimes/:id', [], controller.getShowById)
 
 export default showtimeRoutes

@@ -40,6 +40,10 @@
     {
       "name": "user-resource",
       "description": "User related api"
+    },
+    {
+      "name": "auth",
+      "description": "routes for auth"
     }
   ],
   "servers": [
@@ -48,7 +52,784 @@
       "description": "Local server"
     }
   ],
-  "paths": {},
+  "paths": {
+    "/movies/query/p": {
+      "get": {
+        "description": "Get movie data by query",
+        "tags": ["all-role", "movie-resource"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "required": false,
+            "description": "Movie title",
+            "schema": {
+              "type": "string",
+              "example": "Roma"
+            }
+          },
+          {
+            "in": "query",
+            "name": "director",
+            "required": false,
+            "description": "Movie director",
+            "schema": {
+              "type": "string",
+              "example": "Alfonso Cuaron"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie data accroding to query param",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movie"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "delete": {
+        "description": "Delete movie data by ObjectId",
+        "tags": ["admin-role", "movie-resource"],
+        "security": [{ "JWT": ["admin"] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Movie id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "description": "Get movie data by ObjectId",
+        "security": [],
+        "tags": ["all-role", "movie-resource"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Movie id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie found for id",
+            "$ref": "#/components/schemas/Movie"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/movies": {
+      "patch": {
+        "description": "Update movie data",
+        "tags": ["admin-role", "movie-resource"],
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "requestBody": {
+          "description": "Movie data for update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movie"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Movie updated"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new movie data",
+        "security": [{ "JWT": ["admin"] }],
+        "tags": ["admin-role", "movie-resource"],
+        "requestBody": {
+          "description": "Movie data to be created",
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movie-to-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Created"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "description": "Get all Movies data",
+        "security": [],
+        "tags": ["all-role", "movie-resource"],
+        "responses": {
+          "200": {
+            "description": "All Movies data in Array of JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Movie"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["admin-role", "user-resource"],
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "description": "Get a user data by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "User id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "description": "Create user",
+        "tags": ["admin-role", "user-resource"],
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "requestBody": {
+          "description": "Movie data to be created",
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User-to-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Created"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "description": "Get all user data",
+        "tags": ["admin-role", "user-resource"],
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Users data in Array of JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/showtimes/{id}": {
+      "delete": {
+        "description": "Delete showtime data by ObjectId",
+        "tags": ["admin-role", "showtime-resource"],
+        "security": [{ "JWT": ["admin"] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Showtime id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "description": "Get showtime data by ObjectId",
+        "security": [],
+        "tags": ["all-role", "showtime-resource"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Showtime id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Showtime found for id",
+            "$ref": "#/components/schemas/Movie"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/showtimes/movie": {
+      "post": {
+        "tags": ["admin-role", "showtime-resource"],
+        "description": "Add movie to showtime",
+        "requestBody": {
+          "description": "Movie id to be added",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["movie", "showtime"],
+                "type": "object",
+                "properties": {
+                  "movie": {
+                    "description": "movie id",
+                    "type": "string",
+                    "format": "ObjectId"
+                  },
+                  "showtime": {
+                    "description": "showtime id",
+                    "type": "string",
+                    "format": "ObjectId"
+                  }
+                },
+                "example": {
+                  "movie": "5fcf76d9e5b0d527acdb3fb9",
+                  "showtime": "5fcf76d9e5b0d527acdb3fb7"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Showtime added with movie"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/showtimes": {
+      "post": {
+        "description": "Create a new showtime data",
+        "security": [{ "JWT": ["admin"] }],
+        "tags": ["admin-role", "showtime-resource"],
+        "requestBody": {
+          "description": "Showtime data to be created",
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Movie-to-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Created"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "description": "Get all Showtimes data",
+        "tags": ["all-role", "showtime-resource"],
+        "responses": {
+          "200": {
+            "description": "All Showtimes data in Array of JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Showtime"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/bookings/{id}": {
+      "get": {
+        "description": "Get Booking data by ObjectId",
+        "security": [
+          {
+            "JWT": ["admin", "user"]
+          }
+        ],
+        "tags": ["user-role", "admin-role", "movie-resource"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Movie id as Mongo ObjectId",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie found for id",
+            "$ref": "#/components/schemas/Movie"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/bookings/query/p": {
+      "get": {
+        "tags": ["admin-role", "booking-resource"],
+        "description": "Gwt booking data by query",
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "movie",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "user",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "showtime",
+            "schema": {
+              "type": "string",
+              "format": "ObjectId",
+              "example": "5fb4e2c3b7ad5b4108d0ff67"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bookings": {
+      "post": {
+        "tags": ["user-role", "admin-role", "booking-resource"],
+        "description": "Create a booking data",
+        "security": [
+          {
+            "JWT": ["admin", "user"]
+          }
+        ],
+        "requestBody": {
+          "description": "Booking data to be created",
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Booking-to-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Created"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["admin-role", "booking-resource"],
+        "description": "Get all bookings data",
+        "security": [
+          {
+            "JWT": ["admin"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Bookings data in Array of JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Booking"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "403": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "description": "Sign in for user",
+        "requestBody": {
+          "description": "Credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": {
+                    "description": "User's username.",
+                    "type": "string",
+                    "example": "kinbote"
+                  },
+                  "password": {
+                    "description": "User's password.",
+                    "type": "string",
+                    "example": "kinbote01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["all-role", "auth"],
+        "responses": {
+          "200": {
+            "description": "Sign-in success with Token and user description",
+            "content": {
+              "application/json": {
+                "example": {
+                  "response": {
+                    "value": {
+                      "message": "User Authenticated",
+                      "user": {
+                        "id": "5fb4e2c3b7ad5b4108d0ff67",
+                        "username": "kinbote",
+                        "email": "kinbote@gmail.com",
+                        "role": "User"
+                      },
+                      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjAxMzc0MzYyLCJleHAiOjE2MDE0NjA3NjJ9.5bzF3IQjhRRJNee8KpUzfTYUB8tnI72HF4cm3pspXyE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/InvalidCredential"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": ["all-role", "auth"],
+        "description": "",
+        "requestBody": {
+          "description": "User to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User-to-create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Created"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/DatabaseError"
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "Movie": {
@@ -303,6 +1084,72 @@
         }
       }
     },
+    "responses": {
+      "Updated": {
+        "description": "Resource successfully updated",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "Deleted": {
+        "description": "Resource successfully deleted",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "Created": {
+        "description": "Resource successfully created",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "DatabaseError": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized or missing token",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "InvalidCredential": {
+        "description": "Credential invalid",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "Data required in body not found or Invalid ObjectId",
+        "content": {
+          "application/json": {
+            "schema": {}
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "JWT": {
         "type": "apiKey",
@@ -322,7 +1169,7 @@
   },
   "security": [
     {
-      "JWT": []
+      "JWT": ["admin", "user"]
     },
     {
       "OAuth2": []

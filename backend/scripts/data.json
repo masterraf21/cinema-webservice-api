@@ -3,7 +3,7 @@
     "_model": "User",
     "admin": {
       "username": "admin",
-      "password": "kinbote01",
+      "password": "admin",
       "full_name": "Charles Kinbote",
       "email": "kinbote@gmail.com",
       "gender": "Male",
@@ -23,6 +23,13 @@
       "full_name": "Naori Hana",
       "email": "naorihana@gmail.com",
       "gender": "Female"
+    },
+    "user2": {
+      "username": "blue",
+      "password": "bluecolor",
+      "full_name": "Mr Simple",
+      "email": "gmail@blue.com",
+      "gender": "Male"
     }
   },
   "movie": {

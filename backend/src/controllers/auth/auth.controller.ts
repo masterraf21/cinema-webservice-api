@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { getEnv } from '../../config'
 const env = getEnv()
+const secret: string = <string>env.SECRET
 import { Request, Response, NextFunction } from 'express'
 import { UserModel } from '../../models'
 import { badRequest, internalServerError, invalidCredentials, notFoundError } from '../../errors'
@@ -34,7 +35,7 @@ async function signUp(req: Request, res: Response) {
   }
 }
 async function signIn(req: Request, res: Response) {
-  if (req.body.username && req.body.passsword) {
+  if (req.body.username && req.body.password) {
     const { username, password } = req.body
     const user: Model.IUser | null = await UserModel.findOne({
       username: username
@@ -50,9 +51,9 @@ async function signIn(req: Request, res: Response) {
         role: user.role,
         email: user.email
       },
-      env.SECRET!,
+      secret,
       {
-        expiresIn: env.TOKEN_DURATION
+        expiresIn: 18000
       }
     )
 

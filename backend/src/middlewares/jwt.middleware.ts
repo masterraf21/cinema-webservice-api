@@ -5,6 +5,7 @@ import { invalidCredentials, unAuthorizedError } from '../errors'
 // import { UserModel } from '../models'
 
 const env = getEnv()
+const secret: string = <string>env.SECRET
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = <string>req.headers['x-access-token']
@@ -14,7 +15,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
   }
 
   try {
-    jwtPayload = <any>jwt.verify(token, env.SECRET!)
+    jwtPayload = <any>jwt.verify(token, secret)
     res.locals.jwtPayload = jwtPayload
     next()
   } catch (err) {

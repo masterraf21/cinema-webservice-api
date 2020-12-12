@@ -1,0 +1,1498 @@
+{
+  "openapi" : "3.0.2",
+  "info" : {
+    "title" : "Cinema Backend API",
+    "description" : "Back End API for Cinema System",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0",
+    "x-logo" : {
+      "url" : ""
+    }
+  },
+  "servers" : [ {
+    "url" : "http://localhost:3000/api",
+    "description" : "Local server"
+  } ],
+  "security" : [ {
+    "JWT" : [ "admin", "user" ]
+  }, {
+    "OAuth2" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "all-role",
+    "description" : "Can be accessed by all role"
+  }, {
+    "name" : "admin-role",
+    "description" : "Can only be accessed by admin role"
+  }, {
+    "name" : "user-role",
+    "description" : "Can be accessed by user"
+  }, {
+    "name" : "movie-resource",
+    "description" : "Movie related api"
+  }, {
+    "name" : "booking-resource",
+    "description" : "Booking related api"
+  }, {
+    "name" : "showtime-resource",
+    "description" : "Showtime related api"
+  }, {
+    "name" : "user-resource",
+    "description" : "User related api"
+  }, {
+    "name" : "auth",
+    "description" : "routes for auth"
+  } ],
+  "paths" : {
+    "/movies/query/p" : {
+      "get" : {
+        "tags" : [ "all-role", "movie-resource" ],
+        "description" : "Get movie data by query",
+        "parameters" : [ {
+          "name" : "title",
+          "in" : "query",
+          "description" : "Movie title",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "Roma"
+          }
+        }, {
+          "name" : "director",
+          "in" : "query",
+          "description" : "Movie director",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "Alfonso Cuaron"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Movie data accroding to query param",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Movie"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies/{id}" : {
+      "get" : {
+        "tags" : [ "all-role", "movie-resource" ],
+        "description" : "Get movie data by ObjectId",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Movie id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/schemas/Movie"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ ]
+      },
+      "delete" : {
+        "tags" : [ "admin-role", "movie-resource" ],
+        "description" : "Delete movie data by ObjectId",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Movie id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Resource successfully deleted",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/movies" : {
+      "get" : {
+        "tags" : [ "all-role", "movie-resource" ],
+        "description" : "Get all Movies data",
+        "responses" : {
+          "200" : {
+            "description" : "All Movies data in Array of JSON",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Movie"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ ]
+      },
+      "post" : {
+        "tags" : [ "admin-role", "movie-resource" ],
+        "description" : "Create a new movie data",
+        "requestBody" : {
+          "description" : "Movie data to be created",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Movie-to-create"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Resource successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      },
+      "patch" : {
+        "tags" : [ "admin-role", "movie-resource" ],
+        "description" : "Update movie data",
+        "requestBody" : {
+          "description" : "Movie data for update",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Movie"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Movie updated"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/users/{id}" : {
+      "get" : {
+        "tags" : [ "admin-role", "user-resource" ],
+        "description" : "Get a user data by id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "User id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "admin-role", "user-resource" ],
+        "description" : "Get all user data",
+        "responses" : {
+          "200" : {
+            "description" : "All Users data in Array of JSON",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "admin-role", "user-resource" ],
+        "description" : "Create user",
+        "requestBody" : {
+          "description" : "Movie data to be created",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User-to-create"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Resource successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/showtimes/{id}" : {
+      "get" : {
+        "tags" : [ "all-role", "showtime-resource" ],
+        "description" : "Get showtime data by ObjectId",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Showtime id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/schemas/Movie"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ ]
+      },
+      "delete" : {
+        "tags" : [ "admin-role", "showtime-resource" ],
+        "description" : "Delete showtime data by ObjectId",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Showtime id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Resource successfully deleted",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/showtimes/movie" : {
+      "post" : {
+        "tags" : [ "admin-role", "showtime-resource" ],
+        "description" : "Add movie to showtime",
+        "requestBody" : {
+          "description" : "Movie id to be added",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Showtime added with movie"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/showtimes" : {
+      "get" : {
+        "tags" : [ "all-role", "showtime-resource" ],
+        "description" : "Get all Showtimes data",
+        "responses" : {
+          "200" : {
+            "description" : "All Showtimes data in Array of JSON",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Showtime"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "admin-role", "showtime-resource" ],
+        "description" : "Create a new showtime data",
+        "requestBody" : {
+          "description" : "Showtime data to be created",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Movie-to-create"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Resource successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/bookings/{id}" : {
+      "get" : {
+        "tags" : [ "user-role", "admin-role", "movie-resource" ],
+        "description" : "Get Booking data by ObjectId",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Movie id as Mongo ObjectId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/schemas/Movie"
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin", "user" ]
+        } ]
+      }
+    },
+    "/bookings/query/p" : {
+      "get" : {
+        "tags" : [ "admin-role", "booking-resource" ],
+        "description" : "Gwt booking data by query",
+        "parameters" : [ {
+          "name" : "movie",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        }, {
+          "name" : "user",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        }, {
+          "name" : "showtime",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "5fb4e2c3b7ad5b4108d0ff67"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      }
+    },
+    "/bookings" : {
+      "get" : {
+        "tags" : [ "admin-role", "booking-resource" ],
+        "description" : "Get all bookings data",
+        "responses" : {
+          "200" : {
+            "description" : "All Bookings data in Array of JSON",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Booking"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin" ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "user-role", "admin-role", "booking-resource" ],
+        "description" : "Create a booking data",
+        "requestBody" : {
+          "description" : "Booking data to be created",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Booking-to-create"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Resource successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized or missing token",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "JWT" : [ "admin", "user" ]
+        } ]
+      }
+    },
+    "/auth/signin" : {
+      "post" : {
+        "tags" : [ "all-role", "auth" ],
+        "description" : "Sign in for user",
+        "requestBody" : {
+          "description" : "Credentials",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Sign-in success with Token and user description",
+            "content" : {
+              "application/json" : {
+                "example" : {
+                  "response" : {
+                    "value" : {
+                      "message" : "User Authenticated",
+                      "user" : {
+                        "id" : "5fb4e2c3b7ad5b4108d0ff67",
+                        "username" : "kinbote",
+                        "email" : "kinbote@gmail.com",
+                        "role" : "User"
+                      },
+                      "accessToken" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjAxMzc0MzYyLCJleHAiOjE2MDE0NjA3NjJ9.5bzF3IQjhRRJNee8KpUzfTYUB8tnI72HF4cm3pspXyE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Credential invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup" : {
+      "post" : {
+        "tags" : [ "all-role", "auth" ],
+        "requestBody" : {
+          "description" : "User to create",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User-to-create"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Resource successfully created",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Data required in body not found or Invalid ObjectId",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Movie" : {
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "ObjectId assigned default by MongoDB",
+            "format" : "ObjectId",
+            "example" : "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Title of the movie",
+            "example" : "Eternal Sunshine of The Spotless Mind"
+          },
+          "director" : {
+            "type" : "string",
+            "description" : "Director of the movie",
+            "example" : "Michel Gondry"
+          },
+          "summary" : {
+            "type" : "string",
+            "description" : "Summary of the movie",
+            "example" : "A couple tries to forget each other, what waited beyond them shake their core"
+          },
+          "rating" : {
+            "maximum" : 5,
+            "minimum" : 0,
+            "type" : "number",
+            "description" : "Rating of the movie"
+          }
+        },
+        "description" : "Movie data"
+      },
+      "Movie-to-create" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Title of the movie",
+            "example" : "Eternal Sunshine of The Spotless Mind"
+          },
+          "director" : {
+            "type" : "string",
+            "description" : "Director of the movie",
+            "example" : "Michel Gondry"
+          },
+          "summary" : {
+            "type" : "string",
+            "description" : "Summary of the movie",
+            "example" : "A couple tries to forget each other, what waited beyond them shake their core"
+          },
+          "rating" : {
+            "maximum" : 5,
+            "minimum" : 0,
+            "type" : "number",
+            "description" : "Rating of the movie"
+          }
+        },
+        "description" : "Movie data to be created"
+      },
+      "Showtime" : {
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "ObjectId assigned default by MongoDB",
+            "format" : "ObjectId",
+            "example" : "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "date" : {
+            "type" : "string",
+            "description" : "Date and time of the showtime",
+            "format" : "date-time",
+            "example" : "2020-11-18T09:00:51.294Z"
+          },
+          "movies" : {
+            "type" : "array",
+            "description" : "Movies in the showtime",
+            "items" : {
+              "$ref" : "#/components/schemas/Movie"
+            }
+          }
+        },
+        "description" : "Showtime data"
+      },
+      "Showtime-to-create" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "description" : "Date and time of the showtime",
+            "format" : "date-time",
+            "example" : "2020-11-18T09:00:51.294Z"
+          },
+          "movies" : {
+            "type" : "array",
+            "description" : "Movies in the showtime",
+            "items" : {
+              "$ref" : "#/components/schemas/Movie"
+            }
+          }
+        },
+        "description" : "Showtime data"
+      },
+      "Booking" : {
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "ObjectId assigned default by MongoDB",
+            "format" : "ObjectId",
+            "example" : "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "showtimes" : {
+            "$ref" : "#/components/schemas/Showtime"
+          },
+          "movie" : {
+            "$ref" : "#/components/schemas/Movie"
+          }
+        },
+        "description" : "Booking made by User to see a movie at a showtime"
+      },
+      "Booking-to-create" : {
+        "type" : "object",
+        "properties" : {
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "showtimes" : {
+            "$ref" : "#/components/schemas/Showtime"
+          },
+          "movie" : {
+            "$ref" : "#/components/schemas/Movie"
+          }
+        },
+        "description" : "Booking to be created"
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "ObjectId assigned default by MongoDB",
+            "format" : "ObjectId",
+            "example" : "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "Username unique to each user",
+            "example" : "kinbote01"
+          },
+          "encrypted_password" : {
+            "type" : "string",
+            "description" : "Hashed password",
+            "format" : "hash",
+            "example" : "2678d27b7faca76050e7b69727ee0bb22342c07796f1336ad066e2c0c439f426"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "email of the user",
+            "example" : "kinbote@gmail.com"
+          },
+          "role" : {
+            "type" : "string",
+            "description" : "Role of the user",
+            "default" : "User",
+            "enum" : [ "User", "Admin" ]
+          },
+          "full_name" : {
+            "type" : "string",
+            "description" : "Full name of the user",
+            "example" : "Charles Kinbote"
+          },
+          "salt" : {
+            "type" : "string",
+            "description" : "salt to hash the user password",
+            "example" : "2765381a-9ad9-4491-86a3-1523a18aeacb"
+          }
+        },
+        "description" : "User doing operations"
+      },
+      "User-to-create" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "description" : "Username unique to each user",
+            "example" : "kinbote01"
+          },
+          "plain_pasword" : {
+            "type" : "string",
+            "description" : "Plain password",
+            "example" : "kinbotethebest"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "email of the user",
+            "example" : "kinbote@gmail.com"
+          },
+          "role" : {
+            "type" : "string",
+            "description" : "Role of the user",
+            "default" : "User",
+            "enum" : [ "User", "Admin" ]
+          },
+          "full_name" : {
+            "type" : "string",
+            "description" : "Full name of the user",
+            "example" : "Charles Kinbote"
+          }
+        },
+        "description" : "User doing operations"
+      },
+      "User-oauth" : {
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "ObjectId assigned default by MongoDB",
+            "format" : "ObjectId",
+            "example" : "ObjectId('5fb4e2c3b7ad5b4108d0ff67')"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "email of the user",
+            "example" : "kinbote@gmail.com"
+          },
+          "role" : {
+            "type" : "string",
+            "description" : "Role of the user",
+            "default" : "User",
+            "enum" : [ "User", "Admin" ]
+          }
+        },
+        "description" : "User registered by oauth"
+      },
+      "body" : {
+        "required" : [ "movie", "showtime" ],
+        "type" : "object",
+        "properties" : {
+          "movie" : {
+            "type" : "string",
+            "description" : "movie id",
+            "format" : "ObjectId"
+          },
+          "showtime" : {
+            "type" : "string",
+            "description" : "showtime id",
+            "format" : "ObjectId"
+          }
+        },
+        "example" : {
+          "movie" : "5fcf76d9e5b0d527acdb3fb9",
+          "showtime" : "5fcf76d9e5b0d527acdb3fb7"
+        }
+      },
+      "body_1" : {
+        "required" : [ "password", "username" ],
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "description" : "User's username.",
+            "example" : "kinbote"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "User's password.",
+            "example" : "kinbote01"
+          }
+        }
+      }
+    },
+    "responses" : {
+      "Updated" : {
+        "description" : "Resource successfully updated",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "Deleted" : {
+        "description" : "Resource successfully deleted",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "Created" : {
+        "description" : "Resource successfully created",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "DatabaseError" : {
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "Unauthorized" : {
+        "description" : "Unauthorized or missing token",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "InvalidCredential" : {
+        "description" : "Credential invalid",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "NotFoundError" : {
+        "description" : "Resource not found",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      },
+      "BadRequest" : {
+        "description" : "Data required in body not found or Invalid ObjectId",
+        "content" : {
+          "application/json" : {
+            "schema" : { }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "JWT" : {
+        "type" : "apiKey",
+        "name" : "x-access-token",
+        "in" : "header"
+      },
+      "OAuth2" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "oauth.google.com",
+            "tokenUrl" : "oauth.google.com/token",
+            "scopes" : { }
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@
     "format": "prettier --write '*.{yml,json,md}' '{src,test}/**/*'",
     "start": "node lib/server.js",
     "start:prod": "pm2-runtime lib/server.js",
+    "prestart:prod": "npm run db:reset",
     "start:dev": "nodemon",
     "test": "jest --preset ts-jest",
     "prebuild": "npm run clean",

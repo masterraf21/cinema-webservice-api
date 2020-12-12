@@ -45,6 +45,18 @@
       "director": "Francis Ford Coppola",
       "rating": 5.0,
       "summary": "A great king with 3 sons trying to give his empire to one of them"
+    },
+    "movie3": {
+      "title": "Blade Runner 2049",
+      "director": "Dennis Villeneuve",
+      "rating": 4.9,
+      "summary": "Fuck off skin job"
+    },
+    "movie4": {
+      "title": "Midnight in Paris",
+      "director": "Woody Allen",
+      "rating": 4.0,
+      "summary": "Owen wilson lost in time"
     }
   }
 }

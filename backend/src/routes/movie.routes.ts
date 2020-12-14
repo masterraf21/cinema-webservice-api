@@ -4,10 +4,10 @@ import { isAdmin, verifyToken } from '../middlewares'
 const movieRoutes = Router()
 
 movieRoutes.get('/movies', [], controller.getAllMovie)
-movieRoutes.post('/movies', [verifyToken, isAdmin], controller.createMovie)
+movieRoutes.post('/movies', [], controller.createMovie)
 movieRoutes.get('/movies/:id', [], controller.getMoviebyId)
 movieRoutes.get('/movies/query/p', [], controller.searchMovieQuery)
-movieRoutes.delete('/movies/:id', [verifyToken, isAdmin], controller.deleteMoviebyId)
-movieRoutes.patch('/movies', [verifyToken, isAdmin], controller.editMovie)
+movieRoutes.delete('/movies/:id', [], controller.deleteMoviebyId)
+movieRoutes.patch('/movies', [], controller.editMovie)
 
 export default movieRoutes

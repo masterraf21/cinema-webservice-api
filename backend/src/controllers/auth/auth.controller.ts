@@ -59,12 +59,10 @@ async function signIn(req: Request, res: Response) {
 
     res.status(200).json({
       message: 'User Authenticated',
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role
-      },
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
       accessToken: token
     })
   } else {

@@ -813,7 +813,7 @@
     },
     "/bookings/{id}" : {
       "get" : {
-        "tags" : [ "user-role", "admin-role", "movie-resource" ],
+        "tags" : [ "user-role", "admin-role", "booking-resource" ],
         "description" : "Get Booking data by ObjectId",
         "parameters" : [ {
           "name" : "id",
@@ -830,7 +830,7 @@
         } ],
         "responses" : {
           "200" : {
-            "$ref" : "#/components/schemas/Movie"
+            "$ref" : "#/components/schemas/Booking"
           },
           "400" : {
             "description" : "Data required in body not found or Invalid ObjectId",

@@ -9,14 +9,7 @@ services:
       - ./db:/data/db
     networks:
       - db-network
-
-  # mongo-seed:
-  #   build: ./mongo-seed
-  #   links:
-  #     - mongodb
-  #   depends_on:
-  #     - mongodb
-
+      
   backend:
     env_file:
       .env

@@ -26,13 +26,11 @@ exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const crypto_1 = __importDefault(require("crypto"));
 const uuid_1 = require("uuid");
-const passport = __importStar(require("passport-local-mongoose"));
 // import { use } from 'nconf'
 const userSchema = new mongoose_1.Schema({
     username: {
         type: String,
         unique: true,
-        required: true,
         trim: true
     },
     encrypted_password: {
@@ -43,11 +41,6 @@ const userSchema = new mongoose_1.Schema({
         required: true,
         trim: true
     },
-    gender: {
-        type: String,
-        enum: ['Male', 'Female'],
-        required: true
-    },
     role: {
         type: String,
         enum: ['User', 'Admin'],
@@ -56,7 +49,6 @@ const userSchema = new mongoose_1.Schema({
     },
     full_name: {
         type: String,
-        required: true,
         trim: true
     },
     salt: String
@@ -82,7 +74,6 @@ userSchema.method({
         return crypto_1.default.createHmac('sha256', this.salt).update(plain_password).digest('hex');
     }
 });
-passport.default(userSchema);
 class UserModel extends mongoose_1.default.model('User', userSchema, 'users') {
     constructor(userData) {
         super(userData);

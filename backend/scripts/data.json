@@ -50,13 +50,49 @@
       "title": "Blade Runner 2049",
       "director": "Dennis Villeneuve",
       "rating": 4.9,
-      "summary": "Fuck off skin job"
+      "summary": "Flying cars go brr...."
     },
     "movie4": {
       "title": "Midnight in Paris",
       "director": "Woody Allen",
       "rating": 4.0,
-      "summary": "Owen wilson lost in time"
+      "summary": "Whoa Hemingway..."
+    },
+    "movie5": {
+      "title": "Avengers Endgame",
+      "director": "The Russo Brothers",
+      "rating": 4.0,
+      "summary": "Thanos brr...."
+    },
+    "movie6": {
+      "title": "Prisoners",
+      "director": "Dennis Villeneuve",
+      "rating": 4.4,
+      "summary": "Angry Wolverine is scary"
+    },
+    "movie7": {
+      "title": "2001: A Space Oddysey",
+      "director": "Stanley Kubrick",
+      "rating": 5.0,
+      "summary": "I'm afraid i can't do that"
+    },
+    "movie8": {
+      "title": "Moonlight",
+      "director": "Barry Jenkins",
+      "rating": 5.0,
+      "summary": "In moonlight, black boys look blue"
+    },
+    "movie9": {
+      "title": "Garden of Words",
+      "director": "Makoto Shinkai",
+      "rating": "3.9",
+      "summary": "Hello teacher"
+    },
+    "movie10": {
+      "title": "The Matrix",
+      "director": "The Wachowski Brothers",
+      "rating": 4.9,
+      "summary": "Neo, it's Neo"
     }
   }
 }

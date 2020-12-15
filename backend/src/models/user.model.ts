@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import crypto from 'crypto'
 import { v4 as uuidv4 } from 'uuid'
-import * as passport from 'passport-local-mongoose'
 // import { use } from 'nconf'
 
 const userSchema: Schema = new Schema(

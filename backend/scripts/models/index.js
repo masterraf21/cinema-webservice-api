@@ -13,3 +13,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./movie.model"), exports);
 __exportStar(require("./showtime.model"), exports);
 __exportStar(require("./user.model"), exports);
+__exportStar(require("./booking.model"), exports);
+__exportStar(require("./log.model"), exports);

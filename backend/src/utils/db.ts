@@ -4,6 +4,7 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
 import { getEnv } from '../config'
+import { LogModel } from '../models'
 
 const envVar: Config.ProcessEnv = getEnv()
 
@@ -29,4 +30,11 @@ export async function closeDB() {
   console.log('Closing......')
   await mongoose.connection.close()
   console.log('MongoDB Closed')
+}
+
+export async function writeLog(logData: Model.LogType) {
+  const log: Model.ILog = new LogModel(logData)
+  console.log('Saving....')
+  await log.save()
+  console.log('....Save')
 }

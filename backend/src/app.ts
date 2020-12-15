@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express'
+import * as fs from 'fs'
+import * as path from 'path'
+import morgan from 'morgan'
 import passport from 'passport'
 import { connectDB } from './utils'
+// import { saveLog } from './middlewares'
 import cors from 'cors'
+import { getEnv } from './config'
 import * as swaggerUi from 'swagger-ui-express'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const file = '../docs/swagger.json'
@@ -14,6 +19,7 @@ import showtimeRoutes from './routes/showtime.routes'
 import bookingRoutes from './routes/booking.routes'
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
+
 // create exporess APP
 const app = express()
 
@@ -27,6 +33,14 @@ app.use((req, res, next) => {
 }, cors({ maxAge: 84600 }))
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(
+  morgan('common', {
+    stream: fs.createWriteStream('./files/access.log', { flags: 'a' })
+  })
+)
+app.use(express.static('./files'))
+app.use(morgan('dev'))
+// app.use(saveLog)
 app.use(passport.initialize())
 
 //? Routes

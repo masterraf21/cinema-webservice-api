@@ -121,6 +121,9 @@ async function searchMovieQuery(req: Request, res: Response) {
 async function editMovie(req: Request, res: Response) {
   try {
     if (req.body.id) {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return badRequest('ObjectId Not valid', res)
+      }
       let query: Model.MovieType
       if (req.body.title && req.body.director && req.body.rating && req.body.summary) {
         query = {
@@ -133,10 +136,12 @@ async function editMovie(req: Request, res: Response) {
         if (!movie) {
           return notFoundError('Movie', res)
         }
-        res.status(204).json({
+        const newMovie: Model.IMovie | null = await MovieModel.findById(movie._id)
+        res.status(200).json({
           message: 'Movie updated',
           movie: {
-            id: movie._id
+            id: newMovie?._id,
+            title: newMovie?.title
           }
         })
       } else {

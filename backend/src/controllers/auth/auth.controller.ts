@@ -1,13 +1,48 @@
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
 import { getEnv } from '../../config'
-const env = getEnv()
-const secret: string = <string>env.SECRET
 import { Request, Response, NextFunction } from 'express'
 import { UserModel } from '../../models'
 import { badRequest, internalServerError, invalidCredentials, notFoundError } from '../../errors'
+import { header } from 'express-validator'
+const env = getEnv()
+const secret: string = <string>env.SECRET
+const clientSecret = env.GITHUB_SECRET
+const clientId = env.GITHUB_CLIENT_ID
+const github_callback = env.GITHUB_CALLBACK_URL
+let token: any = null
+function githubCallback(req: Request, res: Response) {
+  const body = {
+    client_id: clientId,
+    client_secret: clientSecret,
+    code: req.query.code
+  }
+  const opts = { headers: { accept: 'application/json' } }
+  axios
+    .post(`https://github.com/login/oauth/access_token`, body, opts)
+    .then((response) => {
+      // console.log(response)
+      res.status(200).json(response)
+      // token = response.data.access_token
+    })
+    .catch((err) => res.status(500).json({ message: err.message }))
+}
 
-async function githubCallback(req: Request, res: Response) {
-  console.log(req.user)
+function successHandler(req: Request, res: Response) {
+  axios
+    .get(`https://api.github.com/user`, {
+      headers: {
+        Authorization: 'token' + token
+      }
+    })
+    .then((response) => {
+      res.status(200).json({
+        userData: response.data
+      })
+    })
+}
+function githubHandle(req: Request, res: Response) {
+  res.redirect(`https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user:email`)
 }
 async function signUp(req: Request, res: Response) {
   if (
@@ -69,4 +104,4 @@ async function signIn(req: Request, res: Response) {
     badRequest('Required body not found', res)
   }
 }
-export { githubCallback, signIn, signUp }
+export { githubCallback, signIn, signUp, githubHandle, successHandler }
